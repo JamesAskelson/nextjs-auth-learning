@@ -14,6 +14,26 @@ export type PostWithData = (
 //     ReturnType<typeof fetchPostsByTopicSlug>
 // >[number];
 
+export function fetchPostsBySearch(term: string): Promise<PostWithData[]> {
+    return db.post.findMany({
+        where: {
+            OR: [{ title: {
+                contains: term
+            }}, {
+                content: {
+                    contains: term
+                }
+            }]
+        },
+        include: {
+            topic: { select: {slug: true }},
+            user: { select: {name: true}},
+            _count: {select: { comments: true }}
+        }
+    })
+}
+
+
 export function fetchPostsByTopicSlug(slug: string): Promise<PostWithData[]> {
     return db.post.findMany({
         where: { topic: { slug }},
@@ -23,4 +43,22 @@ export function fetchPostsByTopicSlug(slug: string): Promise<PostWithData[]> {
             _count: {select: { comments: true }}
         }
     })
+}
+
+export function fetchTopPosts(): Promise<PostWithData[]> {
+    return db.post.findMany({
+        orderBy: [
+            {
+                comments: {
+                    _count: 'desc'
+                },
+            },
+        ],
+        include: {
+            topic: { select: {slug: true }},
+            user: { select: {name: true}},
+            _count: {select: { comments: true }}
+        },
+        take: 5,
+    });
 }

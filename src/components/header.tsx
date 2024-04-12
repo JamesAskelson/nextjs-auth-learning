@@ -1,7 +1,8 @@
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Input} from "@nextui-org/react";
 import Link from "next/link";
-import React from "react";
+import React, { Suspense } from "react";
 import HeaderAuth from "./header-auth";
+import SearchInput from "./search-input";
 
 export default function Header() {
 
@@ -15,7 +16,9 @@ export default function Header() {
 
             <NavbarContent justify='center'>
                 <NavbarItem>
-                    <Input />
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <SearchInput />
+                    </ Suspense>
                 </NavbarItem>
             </NavbarContent>
 

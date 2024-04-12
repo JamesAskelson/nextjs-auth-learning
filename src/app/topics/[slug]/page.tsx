@@ -10,7 +10,8 @@ interface TopicShowPageProps {
     }
 }
 
-export default function TopicShowPage({ params }: TopicShowPageProps){
+export default async function TopicShowPage({ params }: TopicShowPageProps){
+    await new Promise(resolve => setTimeout(resolve, 2500))
     const { slug } = params;
 
     return <div className='grid grid-cols-4 gap-4 p-4'>
